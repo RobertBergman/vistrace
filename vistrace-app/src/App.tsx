@@ -69,14 +69,17 @@ const HopDetailsList: React.FC<HopDetailsListProps> = ({ trace }) => {
 };
 
 
-// Placeholder for TraceDetailView component
+// Updated TraceDetailView component to handle all traces
 interface TraceDetailViewProps {
-  trace: TraceRoute;
+  traces: TraceRoute[];
+  selectedTraceId: string | null;
   showDetailsToggle: boolean; // from App's state, for the visualization
   onToggleDetails: () => void; // from App's state
 }
-const TraceDetailView: React.FC<TraceDetailViewProps> = ({ trace, showDetailsToggle, onToggleDetails }) => {
+const TraceDetailView: React.FC<TraceDetailViewProps> = ({ traces, selectedTraceId, showDetailsToggle, onToggleDetails }) => {
   const [activeTab, setActiveTab] = useState<'map' | 'hops'>('map');
+  
+  const selectedTrace = traces.find(t => t.id === selectedTraceId);
 
   return (
     <div className="bg-white rounded-lg shadow-lg h-full flex flex-col">
@@ -97,11 +100,16 @@ const TraceDetailView: React.FC<TraceDetailViewProps> = ({ trace, showDetailsTog
         </nav>
       </div>
       <div className="flex-grow overflow-y-auto">
-        {activeTab === 'map' && trace && (
-          <TracerouteVisualization trace={trace} showDetails={showDetailsToggle} onToggleDetails={onToggleDetails} />
+        {activeTab === 'map' && (
+          <TracerouteVisualization 
+            traces={traces} 
+            selectedTraceId={selectedTraceId || undefined}
+            showDetails={showDetailsToggle} 
+            onToggleDetails={onToggleDetails} 
+          />
         )}
-        {activeTab === 'hops' && trace && (
-          <HopDetailsList trace={trace} />
+        {activeTab === 'hops' && selectedTrace && (
+          <HopDetailsList trace={selectedTrace} />
         )}
       </div>
     </div>
@@ -212,9 +220,10 @@ function App() {
 
         {/* Main View Area */}
         <div className="flex-1 p-4 overflow-y-auto">
-          {currentTrace ? (
+          {allTraces.length > 0 ? (
             <TraceDetailView 
-              trace={currentTrace} 
+              traces={allTraces}
+              selectedTraceId={currentTrace?.id || null}
               showDetailsToggle={showTraceDetails} 
               onToggleDetails={() => setShowTraceDetails(s => !s)} 
             />
@@ -222,9 +231,9 @@ function App() {
             <div className="flex items-center justify-center h-full">
               <div className="text-center p-10 bg-white rounded-lg shadow-md">
                 <Info className="w-16 h-16 text-blue-500 mx-auto mb-4" />
-                <h2 className="text-xl font-semibold text-gray-700 mb-2">No Trace Selected</h2>
+                <h2 className="text-xl font-semibold text-gray-700 mb-2">No Traces Available</h2>
                 <p className="text-gray-500">
-                  Select a trace from the history or start a new one using the controls in the sidebar.
+                  Start a new traceroute using the controls in the sidebar to begin visualizing network paths.
                 </p>
               </div>
             </div>
