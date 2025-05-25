@@ -1,0 +1,48 @@
+{
+  "name": "vistrace",
+  "version": "1.0.0",
+  "description": "Real-Time Network Traceroute Visualization",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run backend:dev\" \"npm run frontend:dev\"",
+    "start": "concurrently \"npm run backend:start\" \"npm run frontend:start\"",
+    "build": "npm run backend:build && npm run frontend:build",
+    "backend:dev": "cd vistrace-backend && npm run dev",
+    "backend:start": "cd vistrace-backend && npm start",
+    "backend:build": "cd vistrace-backend && npm run build",
+    "frontend:dev": "cd vistrace-app && npm start",
+    "frontend:start": "cd vistrace-app && npm start",
+    "frontend:build": "cd vistrace-app && npm run build",
+    "install:all": "npm install && cd vistrace-backend && npm install && cd ../vistrace-app && npm install",
+    "test": "concurrently \"npm run backend:test\" \"npm run frontend:test\"",
+    "backend:test": "cd vistrace-backend && npm test",
+    "frontend:test": "cd vistrace-app && npm test",
+    "clean": "rm -rf node_modules vistrace-backend/node_modules vistrace-app/node_modules vistrace-backend/dist"
+  },
+  "workspaces": [
+    "vistrace-app",
+    "vistrace-backend"
+  ],
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=7.0.0"
+  },
+  "keywords": [
+    "traceroute",
+    "network",
+    "visualization",
+    "react",
+    "nodejs",
+    "websocket",
+    "geolocation"
+  ],
+  "author": "VisTrace Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/vistrace.git"
+  }
+}
